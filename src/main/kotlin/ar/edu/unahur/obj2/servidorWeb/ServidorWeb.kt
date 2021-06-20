@@ -27,7 +27,9 @@ class ServidorWebHTTP(val modulos: MutableList<Modulo>, val analizadores: Mutabl
       val moduloQueAtiende = this.moduloAtiende(pedido)
       this.analizarPedidos(moduloQueAtiende, moduloQueAtiende.generarRespuesta(pedido))
       moduloQueAtiende.generarRespuesta(pedido)
-    } else Respuesta(CodigoHttp.NOT_FOUND, "", 10, pedido)
+    }
+    else
+      Respuesta(CodigoHttp.NOT_FOUND, "", 10, pedido)
 
   fun atenderPedidoSiEsHTTP(pedido: Pedido) =
     if (this.urlEsHTTP(pedido)) this.atenderPedido(pedido)
