@@ -46,6 +46,7 @@ class ServidorWebHTTP(val modulos: MutableList<Modulo>, val analizadores: Mutabl
   fun analizarPedidos(modulo: Modulo, respuesta: Respuesta) =
     analizadores.forEach { it.sumarRespuestaDemorada(modulo, respuesta) }
 
+
 }
 
 
