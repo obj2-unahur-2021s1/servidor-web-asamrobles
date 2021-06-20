@@ -1,6 +1,6 @@
 package ar.edu.unahur.obj2.servidorWeb
 
-class ServidorWebHTTP(val modulos: MutableList<Modulo>, val analizadores: MutableList<Analizadores>) {
+class ServidorWebHTTP(val modulos: MutableList<Modulo>, val analizadores: MutableList<Analizador>) {
 
   fun urlEsHTTP(pedido: Pedido) = pedido.protocolo() == "http"
 
@@ -10,9 +10,8 @@ class ServidorWebHTTP(val modulos: MutableList<Modulo>, val analizadores: Mutabl
 
   // Modulos //
 
-  fun agregarModulo(modulo : Modulo){
-    modulos.add(modulo)
-  }
+  fun cargarModulo(modulo: Modulo) { modulos.add(modulo) }
+
   fun sacarModulo(modulo: Modulo){
     modulos.remove(modulo)
   }
@@ -21,16 +20,19 @@ class ServidorWebHTTP(val modulos: MutableList<Modulo>, val analizadores: Mutabl
   fun moduloAtiende(pedido: Pedido) = modulos.find { it.puedeAtender(pedido) }!!
 
   fun atenderPedido(pedido: Pedido) =
-    if (this.algunModuloPuedeAtender(pedido))
-      Respuesta(CodigoHttp.OK, this.moduloAtiende(pedido).mensaje, this.moduloAtiende(pedido).tiempo, pedido)
+    if (this.algunModuloPuedeAtender(pedido)) {
+      val moduloQueAtiende = this.moduloAtiende(pedido)
+      moduloQueAtiende.generarRespuesta(pedido)
+      this.analizarPedidos(moduloQueAtiende,moduloQueAtiende.generarRespuesta(pedido))
 
+    }
     else Respuesta(CodigoHttp.NOT_FOUND, "", 10, pedido)
 
   fun atenderPedidoSiEsHTTP(pedido: Pedido) =
     if(this.urlEsHTTP(pedido)) this.atenderPedido(pedido)
     else Respuesta(CodigoHttp.NOT_IMPLEMENTED, "", 10, pedido)
 
-  fun cargarModulo(modulo: Modulo) { modulos.add(modulo) }
+
 
   // ANALAIZADORES //
 
@@ -40,6 +42,7 @@ class ServidorWebHTTP(val modulos: MutableList<Modulo>, val analizadores: Mutabl
   fun sacarAnalizador(analizador: Analizador){
     analizadores.remove(analizador)
   }
+  fun analizarPedidos(modulo: Modulo, respuesta: Respuesta) = analizadores.forEach{it.devolverModulo(modulo)}
 }
 
 

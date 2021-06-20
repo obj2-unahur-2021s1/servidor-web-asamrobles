@@ -1,5 +1,6 @@
 package ar.edu.unahur.obj2.servidorWeb
 
+import io.kotest.core.datatest.forNone
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import java.time.LocalDateTime
@@ -30,7 +31,8 @@ class ServidorWebTest : DescribeSpec({
     val moduloAudio = Modulo(mutableListOf("mp3", "midi", "wav", "wma", "flac"), "El audio fue procesado con exito", 6)
     val moduloCompresion = Modulo(mutableListOf("rar", "zip", "7z"), "El archivo fue procesado con exito", 6)
 
-    val servidorHTTP = ServidorWebHTTP(mutableListOf(moduloAudio, moduloImagenes, moduloTexto, moduloVideo))
+    val servidorHTTP = ServidorWebHTTP(mutableListOf(moduloAudio, moduloImagenes, moduloTexto, moduloVideo),
+        mutableListOf())
 
     describe("test descomponer URL") {
       it("separar protocolo") {
@@ -76,5 +78,6 @@ class ServidorWebTest : DescribeSpec({
         servidorHTTP.atenderPedidoSiEsHTTP(pedidoFTP).pedido shouldBe pedidoFTP
       }
     }
+
   }
 })
