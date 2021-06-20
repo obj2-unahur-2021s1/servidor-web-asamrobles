@@ -23,9 +23,10 @@ class Analizador (modulo: Modulo,respuesta: Respuesta) {
     //
 
     //
-    fun mapearIpsDelosPedidosRutas() = pedidosRealizadosSospe.map {it.ruta()}
 
-    fun ipsSospeRuta(ruta : String) = this.mapearIpsDelosPedidosRutas().filter {it == ruta}
+    fun conjuntoDeIpsSospeEnRuta(ruta: String) = this.ipsSospeRuta(ruta).map{it.ip}
+
+    fun ipsSospeRuta(ruta : String) = pedidosRealizadosSospe.filter {it.ruta() == ruta}
 
     //
 
