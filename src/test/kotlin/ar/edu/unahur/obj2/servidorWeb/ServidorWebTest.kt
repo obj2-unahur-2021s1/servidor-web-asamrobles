@@ -1,6 +1,5 @@
 package ar.edu.unahur.obj2.servidorWeb
 
-import io.kotest.core.datatest.forNone
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import java.time.LocalDateTime
@@ -64,7 +63,7 @@ class ServidorWebTest : DescribeSpec({
         servidorHTTP.atenderPedidoSiEsHTTP(pedidoComprimidoRAR).pedido shouldBe pedidoComprimidoRAR
       }
       it("si cargo un modulo al servidor que puede atender pedidos que antes no podia devuelve una respuesta con codigo OK, un body y tiempo especificados por el modulo y una referencia al pedido") {
-        servidorHTTP.cargarModulo(moduloCompresion)
+        servidorHTTP.agregarModulo(moduloCompresion)
 
         servidorHTTP.atenderPedidoSiEsHTTP(pedidoComprimidoRAR).codigo shouldBe CodigoHttp.OK
         servidorHTTP.atenderPedidoSiEsHTTP(pedidoComprimidoRAR).body shouldBe "El archivo fue procesado con exito"

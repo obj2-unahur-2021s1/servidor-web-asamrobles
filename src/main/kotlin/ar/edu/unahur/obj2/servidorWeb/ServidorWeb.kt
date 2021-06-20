@@ -10,11 +10,10 @@ class ServidorWebHTTP(val modulos: MutableList<Modulo>, val analizadores: Mutabl
 
   // Modulos //
 
-  fun cargarModulo(modulo: Modulo) { modulos.add(modulo) }
+  fun agregarModulo(modulo: Modulo) { modulos.add(modulo) }
 
-  fun sacarModulo(modulo: Modulo){
-    modulos.remove(modulo)
-  }
+  fun sacarModulo(modulo: Modulo){ modulos.remove(modulo) }
+
   fun algunModuloPuedeAtender(pedido: Pedido) = modulos.any { it.puedeAtender(pedido) }
 
   fun moduloAtiende(pedido: Pedido) = modulos.find { it.puedeAtender(pedido) }!!
@@ -32,16 +31,12 @@ class ServidorWebHTTP(val modulos: MutableList<Modulo>, val analizadores: Mutabl
     if(this.urlEsHTTP(pedido)) this.atenderPedido(pedido)
     else Respuesta(CodigoHttp.NOT_IMPLEMENTED, "", 10, pedido)
 
-
-
   // ANALAIZADORES //
 
-  fun agregarAnalizador(analizador : Analizador) {
-    analizadores.add(analizador)
-  }
-  fun sacarAnalizador(analizador: Analizador){
-    analizadores.remove(analizador)
-  }
+  fun agregarAnalizador(analizador : Analizador) { analizadores.add(analizador) }
+
+  fun sacarAnalizador(analizador: Analizador){ analizadores.remove(analizador) }
+
   fun analizarPedidos(modulo: Modulo, respuesta: Respuesta) = analizadores.forEach{it.devolverModulo(modulo)}
 }
 
