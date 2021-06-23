@@ -41,6 +41,10 @@ class ServidorWebTest : DescribeSpec({
 //pedidos q no pueden ser atendidos por ningun modulo
         val pedidoImagenGIF = Pedido("125.333.345.6", "http://unahur.org.ar/documentos/gif1.gif",
             LocalDateTime.of(2021,9,10,11,12,13))
+        val pedidoImagenTIF = Pedido("125.333.345.6", "http://unahur.org.ar/documentos/gif1.tif",
+            LocalDateTime.of(2021,9,10,11,12,13))
+        val pedidoImagenCOREL = Pedido("125.333.345.6", "http://unahur.org.ar/documentos/gif1.cdr",
+            LocalDateTime.of(2021,9,10,11,12,13))
 
 //pedidos con protocolo diferente a http
         val pedidoHTTPS = Pedido("125.333.345.7", "https://unahur.org.ar/documentos/doc2.html",
@@ -213,6 +217,37 @@ class ServidorWebTest : DescribeSpec({
 
                 analizardor1.conjuntoDeIpsSospeEnRuta("/documentos/video1.mp4").
                     shouldContainExactlyInAnyOrder(listOf("125.333.345.3", "125.333.345.7"))
+            }
+        }
+        describe("test estadisticas de analizadores") {
+            //respuestas OK - cantidad 10
+            servidorHTTP.atenderPedidoYGuardarRespuesta(pedidoTextoPDF_IP2)//2
+            servidorHTTP.atenderPedidoYGuardarRespuesta(pedidoComprimidoRAR)//6
+
+            servidorHTTP.atenderPedidoYGuardarRespuesta(pedidoAudioMP3_IP3)//6
+            servidorHTTP.atenderPedidoYGuardarRespuesta(pedidoAudioMP3_IP2)
+
+            servidorHTTP.atenderPedidoYGuardarRespuesta(pedidoVideoMKV_IP2)//8 48
+            servidorHTTP.atenderPedidoYGuardarRespuesta(pedidoVideoMKV_IP4)
+            servidorHTTP.atenderPedidoYGuardarRespuesta(pedidoVideoMKV_IP5)
+            servidorHTTP.atenderPedidoYGuardarRespuesta(pedidoVideoMKV_IP6)
+            servidorHTTP.atenderPedidoYGuardarRespuesta(pedidoVideoMP4_IP3)
+            servidorHTTP.atenderPedidoYGuardarRespuesta(pedidoVideoMP4_IP5)
+
+            //respuestas not_found - cantidad 3
+            servidorHTTP.atenderPedidoYGuardarRespuesta(pedidoImagenGIF)//10 50
+            servidorHTTP.atenderPedidoYGuardarRespuesta(pedidoImagenTIF)
+            servidorHTTP.atenderPedidoYGuardarRespuesta(pedidoImagenCOREL)
+
+            //respuestas not_implemented - cantidad 2
+            servidorHTTP.atenderPedidoYGuardarRespuesta(pedidoHTTPS)//10
+            servidorHTTP.atenderPedidoYGuardarRespuesta(pedidoFTP)
+
+            it("total de respuestas") {
+                analizardor1.totalRespuestas(servidorHTTP) shouldBe 15
+            }
+            it("promedio de tiempo de respuesta") {
+                analizardor1.tiempoRespuestaPromedio(servidorHTTP) shouldBe 8
             }
         }
     }

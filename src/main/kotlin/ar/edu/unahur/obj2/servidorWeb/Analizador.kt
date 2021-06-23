@@ -30,4 +30,8 @@ class Analizador (val demoraMinima: Int) {
         this.sumarRespuestaDemorada(respuesta, modulo)
         this.registrarPedidoSospe(respuesta, modulo)
     }
+    fun totalRespuestas(servidorWebHTTP: ServidorWebHTTP) = servidorWebHTTP.respuestas.size
+
+    fun tiempoRespuestaPromedio(servidorWebHTTP: ServidorWebHTTP) =
+        servidorWebHTTP.respuestas.sumBy { it.tiempo } / this.totalRespuestas(servidorWebHTTP)
 }
